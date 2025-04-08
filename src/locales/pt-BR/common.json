@@ -1,4 +1,22 @@
 {
-  "olá": "olá",
-  "mundo": "mundo"
+  "inicio": "Página inicial",
+  "sobre": "Sobre nós",
+  "contato": "Fale conosco",
+  "produtos": "Nossos produtos",
+  "servicos": "Serviços oferecidos",
+  "login": "Entrar",
+  "cadastro": "Criar conta",
+  "perfil": "Meu perfil",
+  "sair": "Sair",
+  "buscar": "Buscar resultados",
+  "carregando": "Carregando...",
+  "erro": "Algo deu errado",
+  "sucesso": "Operação realizada",
+  "confirmar": "Confirmar ação",
+  "cancelar": "Cancelar operação",
+  "editar": "Editar dados",
+  "remover": "Remover item",
+  "salvar": "Salvar alterações",
+  "voltar": "Voltar à página anterior",
+  "continuar": "Continuar navegação"
 }

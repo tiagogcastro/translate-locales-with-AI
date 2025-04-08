@@ -62,7 +62,8 @@ async function translateWithRetry(
     const prompt = `
       Você é um assistente que traduz apenas os valores de um objeto JSON.
 
-      O retorno JSON deve ser sempre em aspas duplas \"\".
+      O retorno JSON deve ser sempre em aspas duplas "".
+      Não coloque \" no resultado final.
 
       ${fullTranslation ? 'Os valores que já estiverem traduzidos, ignore. Traduza apenas os valores do objeto JSON que identificar ser necessário.' : ''}
       
@@ -72,7 +73,6 @@ async function translateWithRetry(
       Retorne SOMENTE um JSON válido. Não inclua explicações, comentários ou qualquer texto fora do JSON. Apenas o JSON puro.
 
       Identifique o contexto das traduções do arquivo. Não traduza nomes próprios.
-      "Futbuynow" não deve ser traduzido.
 
       Responda em formato JSON {"chave": "valor"}.
 
@@ -134,16 +134,11 @@ async function main() {
         localeJson = getLocaleJson(targetLocalePath);
       }
 
-      // const diffJson = getDiffBetween(localeJson, baseLocaleJson);
-      let diffJson: LocaleData = {};
+      let diffJson: LocaleData = getDiffBetween(localeJson, baseLocaleJson);
 
       if (fullTranslation) {
         // Traduz tudo do base
         diffJson = { ...baseLocaleJson };
-      } else {
-        // Traduz apenas o que está faltando ou inválido
-        const missingTranslations = getDiffBetween(localeJson, baseLocaleJson);
-        diffJson = { ...missingTranslations };
       }
 
       if (Object.keys(diffJson).length === 0) {
@@ -177,8 +172,8 @@ async function main() {
       );
 
       const combinedResult = processedChunks.reduce((acc, chunk) => {
-        return { ...localeJson, ...chunk };
-      }, {} as LocaleData);
+        return { ...acc, ...chunk };
+      }, { ...localeJson });
 
       const finalJson: LocaleData = {};
       for (const key of baseKeys) {
@@ -186,10 +181,6 @@ async function main() {
       }
 
       const newKeys = Object.keys(diffJson).filter(key => finalJson[key] !== undefined && finalJson[key] !== localeJson[key]);
-
-      console.log({
-        newKeys
-      })
 
       if (newKeys.length > 0) {
         const dirPath = path.dirname(targetLocalePath);
