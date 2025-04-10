@@ -61,23 +61,24 @@ async function translateWithRetry(
   for (let attempt = 1; attempt <= retries; attempt++) {
     const prompt = `
       Você é um assistente que traduz apenas os valores de um objeto JSON.
-
+ 
       O retorno JSON deve ser sempre em aspas duplas "".
       Não coloque \" no resultado final.
-
+ 
       ${fullTranslation ? 'Os valores que já estiverem traduzidos, ignore. Traduza apenas os valores do objeto JSON que identificar ser necessário.' : ''}
-      
+     
       Traduza os valores do objeto JSON ${JSON.stringify(chunk)} do idioma ${BASE_LOCALE} para o idioma (${localeSubDir}).
-      Mantenha as chaves do objeto JSON original.
-
+      NUNCA traduza a chave do objeto JSON e mantenha as chaves do objeto JSON original.
+      Exemplo: se a chave é "olá": {"olá": "valor"}, mantenha a chave escrita como "olá".
+ 
       Retorne SOMENTE um JSON válido. Não inclua explicações, comentários ou qualquer texto fora do JSON. Apenas o JSON puro.
-
+ 
       Identifique o contexto das traduções do arquivo. Não traduza nomes próprios.
-
+ 
       Responda em formato JSON {"chave": "valor"}.
-
+ 
       Garanta que a resposta seja válida e bem formatada em JSON puro.
-
+ 
       ${attempt > 1 ? 'Houve um erro no parse do JSON, então garanta que a resposta seja válida e bem formatada em JSON puro.' : ''}
     `;
 
